@@ -28,7 +28,7 @@ Parameters:
   PrivateSubnet2CIDR:
     Description: The IP range (CIDR notation) for Private subnet 2
     Type: String
-    Default: 10.0.3.0/24
+    Default: 10.0.4.0/24
 
 Resources:
   VPC:
