@@ -198,3 +198,11 @@ Resources:
     Properties:
       SubnetId: !Ref PrivateSubnet2
       RouteTableId: !Ref PrivateRouteTable2
+
+
+Outputs:
+  VPC:
+    Description: A reference to the created vpc
+    Value: !Ref VPC
+    Export: 
+      Name: !Sub ${EnvironmentName}-VPCID
