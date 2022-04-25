@@ -5,6 +5,10 @@ Parameters:
     Description: An Environment name that will be prefixed to resources
     Type: String
 
+  LaunchTemplateVersionNumber:
+    Description: Launch template version number
+    Type: String
+    Default: 1
 
 Resources:
 
@@ -47,3 +51,59 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: 0.0.0.0/0
+  
+  WebAppLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install apache2 -y
+          systemctl start apache2.service
+          cd /var/www/html
+          echo "it works! Udagram, Udacity" > index.html
+      ImageId: ami-04505e74c0741db8d
+      KeyName: project2keypair
+      SecurityGroups:
+      - Ref: WebServerSecurityGroup
+      InstanceType: t3.micro
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sdk"
+        Ebs:
+          VolumeSize: '10'
+
+  WebAppLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties: 
+      LaunchTemplateData:
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            apt-get update -y
+            apt-get install apache2 -y
+            systemctl start apache2.service
+            cd /var/www/html
+            echo "it works! Udagram, Udacity" > index.html
+        ImageId: ami-04505e74c0741db8d
+        KeyName: project2keypair
+        SecurityGroupIds:
+          - !GetAtt LBSecurityGroup.GroupId
+        InstanceType: t3.micro
+        BlockDeviceMappings:
+        - DeviceName: "/dev/sdk"
+          Ebs:
+            VolumeSize: '10'
+
+  WebAppGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier:
+      - Fn::ImportValue: 
+          !Sub "${EnvironmentName}-PRV-NETS"
+      LaunchTemplate:
+        LaunchTemplateId: !Ref WebAppLaunchTemplate
+        Version: !Ref LaunchTemplateVersionNumber
+      MinSize: '2'
+      MaxSize: '4'
+  

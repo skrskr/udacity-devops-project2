@@ -2,5 +2,9 @@
     {
         "ParameterKey":"EnvironmentName",
         "ParameterValue":"NanodegreeProject2"
+    },
+    {
+        "ParameterKey":"LaunchTemplateVersionNumber",
+        "ParameterValue":"1"
     }
 ]
