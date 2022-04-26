@@ -64,7 +64,6 @@ Resources:
           cd /var/www/html
           echo "it works! Udagram, Udacity" > index.html
       ImageId: ami-04505e74c0741db8d
-      KeyName: project2keypair
       SecurityGroups:
       - Ref: WebServerSecurityGroup
       InstanceType: t3.micro
@@ -128,8 +127,8 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Subnets:
-      - Fn::ImportValue: !Sub "${EnvironmentName}-PRI1-SN"
-      - Fn::ImportValue: !Sub "${EnvironmentName}-PRI2-SN"
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB1-SN"
+      - Fn::ImportValue: !Sub "${EnvironmentName}-PUB2-SN"
       SecurityGroups:
       - Ref: LBSecurityGroup
 
