@@ -85,7 +85,6 @@ Resources:
             cd /var/www/html
             echo "it works! Udagram, Udacity" > index.html
         ImageId: ami-04505e74c0741db8d
-        KeyName: project2keypair
         SecurityGroupIds:
           - !GetAtt LBSecurityGroup.GroupId
         InstanceType: t3.micro
